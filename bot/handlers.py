@@ -1046,9 +1046,11 @@ async def handle_video_url(update: Update, context: ContextTypes.DEFAULT_TYPE):
             caption = f"{platform_display}\n"
             if info.get('title'):
                 title = info['title'][:100] + "..." if len(info['title']) > 100 else info['title']
-                caption += f"📝 {title}\n"
-            caption += f"📊 Размер: {format_size(file_size)}"
-            
+                safe_title = escape_markdown(title)
+                caption += f"📝 {safe_title}\n"
+
+            safe_size = escape_markdown(format_size(file_size))
+            caption += f"📊 Размер: {safe_size}"
             # Отправляем видео
             try:
                 with open(temp_filepath, 'rb') as video_file:
@@ -1110,18 +1112,19 @@ async def handle_video_url(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 
                 # Формируем сообщение
                 message_text = (
-                    f"✅ *Видео сохранено на сервере!*\n\n"
+                    f"✅ *Видео сохранено на сервере\\!*\n\n"
                     f"📹 *Платформа:* {platform_display}\n"
-                    f"📏 *Размер:* {format_size(file_size)}\n"
+                    f"📏 *Размер:* {escape_markdown(format_size(file_size))}\n"
                     f"⏰ *Срок хранения:* {link_expire} минут\n"
-                    f"📁 *Имя файла:* `{final_filename}`\n\n"
-                    f"🔗 *Ссылка для скачивания:*\n`{full_url}`\n\n"
+                    f"📁 *Имя файла:* `{escape_markdown(final_filename)}`\n\n"
+                    f"🔗 *Ссылка для скачивания:*\n`{escape_markdown(full_url)}`\n\n"
                     f"⚠️ *Ссылка действительна {link_expire} минут*"
                 )
-                
+
                 if info.get('title'):
                     title = info['title'][:150] + "..." if len(info['title']) > 150 else info['title']
-                    message_text = f"📝 *{title}*\n\n" + message_text
+                    safe_title = escape_markdown(title)
+                    message_text = f"📝 *{safe_title}*\n\n" + message_text
                 
                 await status_msg.edit_text(
                     message_text, 
@@ -1212,6 +1215,20 @@ async def cleanup_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         await update.message.reply_text(f"❌ Ошибка: {str(e)}")
 
+def escape_markdown(text: str) -> str:
+    """Экранирует специальные символы для Markdown"""
+    return text
+    if not text:
+        return text
+    
+    # Список символов, которые нужно экранировать
+    escape_chars = r'_*[]()~`>#+-=|{}.!'
+    
+    # Экранируем каждый символ
+    for char in escape_chars:
+        text = text.replace(char, '\\' + char)
+    
+    return text
 
 def setup_handlers(application):
     """Setup all handlers"""

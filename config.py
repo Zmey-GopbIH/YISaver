@@ -38,3 +38,7 @@ ALLOWED_DOMAINS = [
 TEMP_DIR.mkdir(exist_ok=True)
 VIDEOS_DIR.mkdir(exist_ok=True)
 TEMP_DOWNLOADS_DIR.mkdir(exist_ok=True)
+
+# ========== COOKIES SETTINGS ==========
+USE_BROWSER_COOKIES = True  # Автоматически использовать cookies из браузера
+COOKIES_FILE = None  # Или путь к файлу cookies.txt
