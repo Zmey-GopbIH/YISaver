@@ -2,10 +2,10 @@ import os
 from pathlib import Path
 
 # ========== TELEGRAM BOT ==========
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "YOUR_BOT_TOKEN_HERE")
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN", "8533413936:AAF597F9RSqjnv4AU05YZILETXaUsRGhHks")
 
 # ========== ADMIN SETTINGS ==========
-ADMIN_IDS = [123456789]  # Замените на ваш Telegram ID
+ADMIN_IDS = [384368691]  # Замените на ваш Telegram ID
 
 # ========== FILE SERVER ==========
 FILE_SERVER_HOST = os.getenv("FILE_SERVER_HOST", "0.0.0.0")
